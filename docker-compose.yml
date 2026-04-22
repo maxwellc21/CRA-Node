@@ -1,0 +1,64 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: review-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    restart: unless-stopped
+    env_file:
+      - ./auth-service/.env
+    depends_on:
+      - mongo
+
+  product-service:
+    build: ./product-service
+    container_name: product-service
+    restart: unless-stopped
+    env_file:
+      - ./product-service/.env
+    depends_on:
+      - mongo
+
+  review-service:
+    build: ./review-service
+    container_name: review-service
+    restart: unless-stopped
+    env_file:
+      - ./review-service/.env
+    depends_on:
+      - mongo
+      - product-service
+
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    restart: unless-stopped
+    env_file:
+      - ./user-service/.env
+    depends_on:
+      - mongo
+      - review-service
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./api-gateway/.env
+    depends_on:
+      - auth-service
+      - product-service
+      - review-service
+      - user-service
+
+volumes:
+  mongo_data:
