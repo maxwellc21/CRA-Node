@@ -1,0 +1,22 @@
+body {
+  background: #f8f9fa;
+}
+
+.hero {
+  background: linear-gradient(135deg, #0d6efd, #6f42c1);
+  color: white;
+}
+
+.product-card img {
+  height: 220px;
+  object-fit: cover;
+}
+
+.review-item {
+  border-bottom: 1px solid #e9ecef;
+  padding: 1rem 0;
+}
+
+.review-item:last-child {
+  border-bottom: none;
+}
